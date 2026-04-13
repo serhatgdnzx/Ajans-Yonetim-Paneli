@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body">
+  <%- include('../partials/nav', { active: 'revisions' }) %>
+  <main class="app-main narrow">
+    <h1 class="page-title"><%= item && item._id ? 'Revizyon düzenle' : 'Revizyon ekle' %></h1>
+    <% if (error) { %><p class="form-error"><%= error %></p><% } %>
+    <% const action = item && item._id ? '/revisions/' + item._id + '?_method=PUT' : '/revisions'; %>
+    <form method="post" action="<%= action %>" class="form-card card-elevated form-stack">
+      <label>Müşteri *<select name="client" required><% clients.forEach(c => { %><option value="<%= c._id %>" <%= item && String(item.client)===String(c._id)?'selected':'' %>><%= c.name %></option><% }) %></select></label>
+      <label>Tarih *<input type="date" name="date" required value="<%= item && item.date ? new Date(item.date).toISOString().slice(0,10) : new Date().toISOString().slice(0,10) %>" /></label>
+      <label>İş (opsiyonel)<select name="workLog"><option value="">—</option><% workLogs.forEach(w => { %><option value="<%= w._id %>" <%= item && item.workLog && String(item.workLog)===String(w._id)?'selected':'' %>><%= w.workCode %></option><% }) %></select></label>
+      <label>Revizyon no<input type="number" name="revisionNumber" min="1" value="<%= item?item.revisionNumber||1:1 %>" /></label>
+      <label>Başlık<input type="text" name="title" value="<%= item?item.title||'':'' %>" /></label>
+      <label>Talep eden<input type="text" name="requestedBy" value="<%= item?item.requestedBy||'':'' %>" /></label>
+      <label>Konu<textarea name="topic" rows="2"><%= item?item.topic||'':'' %></textarea></label>
+      <label>Ne yapıldı<textarea name="whatWasDone" rows="2"><%= item?item.whatWasDone||'':'' %></textarea></label>
+      <label>Durum<input type="text" name="status" value="<%= item?item.status||'Bekliyor':'Bekliyor' %>" /></label>
+      <div class="form-actions"><a href="/revisions" class="btn-ghost">İptal</a><button type="submit" class="btn-primary">Kaydet</button></div>
+    </form>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

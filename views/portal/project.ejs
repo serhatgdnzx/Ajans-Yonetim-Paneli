@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body portal-body">
+  <header class="portal-header">
+    <a href="/portal" class="logo">Ajans<span>Flow</span></a>
+    <nav class="portal-nav">
+      <a href="/portal" class="btn-ghost sm">Tüm projeler</a>
+      <span class="portal-user"><%= portalClient.name %></span>
+      <form action="/portal/logout" method="post" class="logout-form"><button type="submit" class="btn-ghost sm">Çıkış</button></form>
+    </nav>
+  </header>
+  <main class="app-main">
+    <div class="page-head">
+      <div>
+        <h1 class="page-title anim-fade-up"><%= project.title %></h1>
+        <p class="subtle anim-fade-up"><%= statusLabel[project.status] || project.status %></p>
+      </div>
+    </div>
+
+    <% if (project.description) { %>
+    <section class="panel anim-fade-up"><h2>Açıklama</h2><p><%= project.description %></p></section>
+    <% } %>
+
+    <section class="panel anim-fade-up" style="--d:0.06s">
+      <h2>Görev durumu</h2>
+      <% if (!tasks.length) { %><p class="empty-hint">Bu projede henüz görev listelenmiyor.</p><% } else { %>
+      <ul class="portal-task-list">
+        <% tasks.forEach(t => { %>
+        <li>
+          <span class="tag"><%= columnLabel[t.column] || t.column %></span>
+          <strong><%= t.title %></strong>
+          <% if (t.description) { %><span class="subtle"><%= t.description %></span><% } %>
+        </li>
+        <% }) %>
+      </ul>
+      <% } %>
+    </section>
+
+    <section class="panel portal-contact-panel anim-fade-up" style="--d:0.1s">
+      <h2>Proje yöneticisi ile iletişim</h2>
+      <% if (project.owner) { %>
+      <div class="pm-card card-elevated">
+        <p><strong><%= project.owner.name %></strong></p>
+        <% if (project.owner.email) { %>
+        <p><a href="mailto:<%= project.owner.email %>?subject=<%= encodeURIComponent(project.title + ' — iletişim') %>"><%= project.owner.email %></a></p>
+        <% } %>
+        <% if (project.owner.phone) { %>
+        <p><a href="tel:<%= String(project.owner.phone).replace(/\s/g,'') %>"><%= project.owner.phone %></a></p>
+        <% } %>
+        <% if (!project.owner.email && !project.owner.phone) { %>
+        <p class="subtle">İletişim bilgisi ajans tarafından eklenebilir.</p>
+        <% } %>
+      </div>
+      <% } else { %>
+      <p class="subtle">Bu projeye henüz proje yöneticisi atanmadı.</p>
+      <% } %>
+
+      <h3 class="portal-form-title">Mesaj gönderin</h3>
+      <p class="subtle">Mesajınız proje yöneticisine ve ajans kayıtlarına düşer; e-posta ile de iletişim kurabilirsiniz.</p>
+      <form method="post" action="/portal/projeler/<%= project._id %>/mesaj" class="form-stack">
+        <label><textarea name="body" rows="4" required placeholder="Mesajınız..." maxlength="4000"></textarea></label>
+        <button type="submit" class="btn-primary">Gönder</button>
+      </form>
+    </section>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body">
+  <%- include('../partials/nav', { active: 'social' }) %>
+  <main class="app-main">
+    <div class="page-head">
+      <h1 class="page-title">Sosyal medya</h1>
+      <a href="/social/yeni" class="btn-primary">Kayıt ekle</a>
+    </div>
+    <% if (!items.length) { %><p class="empty-hint">Kayıt yok.</p><% } else { %>
+    <div class="table-wrap card-elevated">
+      <table class="data-table">
+        <thead><tr><th>Tarih</th><th>Müşteri</th><th>Platform</th><th>Başlık</th><th>Tür</th><th>GV</th><th></th></tr></thead>
+        <tbody>
+          <% items.forEach(s => { %>
+          <tr class="row-hover">
+            <td><%= new Date(s.date).toLocaleDateString('tr') %></td>
+            <td><%= s.client ? s.client.name : '' %></td>
+            <td><%= s.platform||'—' %></td>
+            <td><%= s.contentTitle||'—' %></td>
+            <td><%= s.postType||'—' %></td>
+            <td><%= s.views||0 %></td>
+            <td class="row-actions">
+              <a href="/social/<%= s._id %>/duzenle" class="btn-ghost sm">Düzenle</a>
+              <% if (currentUser.role === 'admin') { %>
+              <form action="/social/<%= s._id %>?_method=DELETE" method="post" class="inline-form" data-swal-delete><button type="submit" class="btn-danger sm">Sil</button></form>
+              <% } %>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <% } %>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

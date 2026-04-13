@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body">
+  <%- include('../partials/nav', { active: 'clients' }) %>
+  <main class="app-main">
+    <div class="page-head">
+      <div>
+        <h1 class="page-title anim-fade-up"><%= client.name %></h1>
+        <p class="subtle anim-fade-up" style="--d:0.04s">
+          <code class="code-tag"><%= client.customerCode || 'Kod yok' %></code>
+          · <a href="/clients/<%= client._id %>/rapor">Detaylı rapor</a>
+        </p>
+      </div>
+      <div class="page-head-actions anim-fade-up" style="--d:0.06s">
+        <a href="/clients/<%= client._id %>/duzenle" class="btn-ghost">Düzenle</a>
+        <a href="/work-logs/yeni" class="btn-primary sm">İş ekle</a>
+      </div>
+    </div>
+
+    <div class="kpi-grid small anim-stagger">
+      <div class="kpi-card"><span class="stat-label">Çalışma saati</span><strong class="kpi-value"><%= toplamSaat %></strong></div>
+      <div class="kpi-card"><span class="stat-label">Onaylı teslimat</span><strong class="kpi-value"><%= onaylananTeslimat %></strong></div>
+      <div class="kpi-card"><span class="stat-label">Hazırlanan teslimat</span><strong class="kpi-value"><%= devamEdenTeslimat %></strong></div>
+      <div class="kpi-card"><span class="stat-label">İş (liste)</span><strong class="kpi-value"><%= toplamIs %></strong></div>
+      <div class="kpi-card"><span class="stat-label">Teslimat</span><strong class="kpi-value"><%= toplamTeslimat %></strong></div>
+      <div class="kpi-card"><span class="stat-label">Sosyal teslimat</span><strong class="kpi-value"><%= sosyalMedyaTeslimat %></strong></div>
+    </div>
+
+    <% if (onaydaBekleyen && onaydaBekleyen.length) { %>
+    <section class="panel warn-panel anim-fade-up">
+      <h2>Onayda bekleyen işler</h2>
+      <ul class="link-list">
+        <% onaydaBekleyen.forEach(i => { %>
+        <li><a href="/work-logs/<%= i._id %>/duzenle"><%= i.workCode %> — <%= i.projectName || '—' %></a></li>
+        <% }) %>
+      </ul>
+    </section>
+    <% } %>
+
+    <div class="detail-grid">
+      <section class="panel anim-fade-up"><h2>İş günlüğü (son)</h2>
+        <% if (!workLogs.length) { %><p class="empty-hint">Kayıt yok</p><% } else { %>
+        <ul class="link-list tight">
+          <% workLogs.forEach(i => { %>
+          <li><a href="/work-logs/<%= i._id %>/duzenle"><%= i.workCode %></a> <span class="tag"><%= i.status %></span> <small><%= i.activityType || '' %></small></li>
+          <% }) %>
+        </ul><% } %>
+      </section>
+      <section class="panel anim-fade-up" style="--d:0.06s"><h2>Teslimatlar</h2>
+        <% if (!deliveries.length) { %><p class="empty-hint">Kayıt yok</p><% } else { %>
+        <ul class="link-list tight">
+          <% deliveries.forEach(d => { %>
+          <li><a href="/deliveries/<%= d._id %>/duzenle"><%= d.deliveryCode %></a> <span class="tag"><%= d.status %></span></li>
+          <% }) %>
+        </ul><% } %>
+      </section>
+      <section class="panel anim-fade-up" style="--d:0.1s"><h2>Sosyal</h2>
+        <% if (!social.length) { %><p class="empty-hint">Kayıt yok</p><% } else { %>
+        <ul class="link-list tight">
+          <% social.forEach(s => { %>
+          <li><a href="/social/<%= s._id %>/duzenle"><%= s.platform %> — <%= s.contentTitle || '' %></a></li>
+          <% }) %>
+        </ul><% } %>
+      </section>
+      <section class="panel anim-fade-up" style="--d:0.14s"><h2>Revizyon</h2>
+        <% if (!revisions.length) { %><p class="empty-hint">Kayıt yok</p><% } else { %>
+        <ul class="link-list tight">
+          <% revisions.forEach(r => { %>
+          <li><a href="/revisions/<%= r._id %>/duzenle"><%= r.title || 'Revizyon' %> #<%= r.revisionNumber %></a></li>
+          <% }) %>
+        </ul><% } %>
+      </section>
+      <section class="panel anim-fade-up span-2" style="--d:0.16s"><h2>Müşteri portalı mesajları</h2>
+        <% if (typeof clientMessages === 'undefined' || !clientMessages.length) { %><p class="empty-hint">Henüz mesaj yok</p><% } else { %>
+        <ul class="message-thread">
+          <% clientMessages.forEach(m => { %>
+          <li class="<%= m.readAt ? '' : 'msg-unread' %>">
+            <time class="subtle"><%= new Date(m.createdAt).toLocaleString('tr') %></time>
+            <% if (m.project && m.project.title) { %><span class="tag"><%= m.project.title %></span><% } %>
+            <p><%= m.body %></p>
+          </li>
+          <% }) %>
+        </ul><% } %>
+      </section>
+      <section class="panel anim-fade-up span-2" style="--d:0.18s"><h2>CRM aramalar</h2>
+        <% if (!calls.length) { %><p class="empty-hint">Kayıt yok</p><% } else { %>
+        <ul class="link-list tight">
+          <% calls.forEach(a => { %>
+          <li><a href="/calls/<%= a._id %>/duzenle"><%= new Date(a.date).toLocaleDateString('tr') %></a> — <%= a.subject || '' %> <span class="tag"><%= a.status %></span></li>
+          <% }) %>
+        </ul><% } %>
+      </section>
+    </div>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

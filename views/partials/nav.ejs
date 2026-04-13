@@ -1,0 +1,26 @@
+<header class="app-header">
+  <a href="/dashboard" class="logo">Ajans<span>Panel</span></a>
+  <nav class="app-nav">
+    <a href="/dashboard" class="<%= typeof active === 'undefined' || active === 'dashboard' ? 'active' : '' %>">Özet</a>
+    <a href="/clients" class="<%= active === 'clients' ? 'active' : '' %>">Müşteriler</a>
+    <a href="/work-logs" class="<%= active === 'workLogs' ? 'active' : '' %>">İş günlüğü</a>
+    <a href="/pending-jobs" class="<%= active === 'pending' ? 'active' : '' %>">Bekleyen</a>
+    <a href="/deliveries" class="<%= active === 'deliveries' ? 'active' : '' %>">Teslimat</a>
+    <a href="/social" class="<%= active === 'social' ? 'active' : '' %>">Sosyal</a>
+    <a href="/revisions" class="<%= active === 'revisions' ? 'active' : '' %>">Revizyon</a>
+    <a href="/calls" class="<%= active === 'calls' ? 'active' : '' %>">CRM</a>
+    <a href="/projects" class="<%= active === 'projects' ? 'active' : '' %>">Projeler</a>
+    <a href="/reports" class="<%= active === 'reports' ? 'active' : '' %>">Raporlar</a>
+    <a href="/excel" class="<%= active === 'excel' ? 'active' : '' %>">Excel</a>
+    <% if (currentUser && currentUser.role === 'admin') { %>
+    <a href="/users" class="<%= active === 'users' ? 'active' : '' %>">Ekip</a>
+    <% } %>
+  </nav>
+  <div class="app-user">
+    <span class="app-user-name"><%= currentUser.name %></span>
+    <span class="badge-role"><%= currentUser.role === 'admin' ? 'Yönetici' : 'Çalışan' %></span>
+    <form action="/auth/logout" method="post" class="logout-form">
+      <button type="submit" class="btn-ghost sm">Çıkış</button>
+    </form>
+  </div>
+</header>

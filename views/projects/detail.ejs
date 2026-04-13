@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body">
+  <%- include('../partials/nav', { active: 'projects' }) %>
+  <main class="app-main board-main">
+    <div class="page-head board-head">
+      <div>
+        <h1 class="page-title"><%= project.title %></h1>
+        <% if (project.client) { %>
+        <p class="subtle"><%= project.client.name %> · <span class="tag <%= project.status === 'bitti' ? 'tag-done' : '' %>"><%= project.status === 'bitti' ? 'Bitti' : 'Devam ediyor' %></span></p>
+        <% } %>
+        <% if (project.owner) { %>
+        <p class="subtle">Proje yöneticisi: <strong><%= project.owner.name %></strong>
+          <% if (project.owner.email) { %> · <a href="mailto:<%= project.owner.email %>"><%= project.owner.email %></a><% } %>
+          <% if (project.owner.phone) { %> · <a href="tel:<%= String(project.owner.phone).replace(/\s/g,'') %>"><%= project.owner.phone %></a><% } %>
+        </p>
+        <% } %>
+      </div>
+      <a href="/projects/<%= project._id %>/duzenle" class="btn-ghost">Proje düzenle</a>
+    </div>
+
+    <section class="add-task card-elevated">
+      <h2>Yeni görev</h2>
+      <form method="post" action="/tasks/project/<%= project._id %>" class="form-inline-task">
+        <input type="text" name="title" placeholder="Görev başlığı" required />
+        <select name="column">
+          <% columns.forEach(col => { %>
+          <option value="<%= col.key %>"><%= col.label %></option>
+          <% }) %>
+        </select>
+        <select name="assignee">
+          <option value="">Atanan yok</option>
+          <% users.forEach(u => { %>
+          <option value="<%= u._id %>"><%= u.name %></option>
+          <% }) %>
+        </select>
+        <button type="submit" class="btn-primary sm">Ekle</button>
+      </form>
+    </section>
+
+    <div class="kanban" id="kanban" data-project-id="<%= project._id %>">
+      <% columns.forEach(col => { %>
+      <div class="kanban-column" data-column="<%= col.key %>">
+        <h3><%= col.label %> <span class="count"><%= board[col.key].length %></span></h3>
+        <div class="kanban-dropzone" data-column="<%= col.key %>">
+          <% board[col.key].forEach((t, i) => { %>
+          <article class="task-card" draggable="true" data-task-id="<%= t._id %>" data-order="<%= i %>">
+            <div class="task-card-body">
+              <strong><%= t.title %></strong>
+              <% if (t.assignee) { %><small class="assignee"><%= t.assignee.name %></small><% } %>
+            </div>
+            <form action="/tasks/<%= t._id %>?_method=DELETE" method="post" class="task-delete" data-swal-delete data-swal-title="Görev silinsin mi?">
+              <button type="submit" aria-label="Sil">×</button>
+            </form>
+          </article>
+          <% }) %>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </main>
+  <script src="/js/board.js"></script>
+  <%- include('../partials/foot') %>
+</body>
+</html>

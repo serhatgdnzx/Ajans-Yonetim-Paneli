@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body">
+  <%- include('../partials/nav', { active: 'pending' }) %>
+  <main class="app-main">
+    <h1 class="page-title anim-fade-up">Bekleyen işler</h1>
+    <p class="subtle anim-fade-up" style="--d:0.05s">Henüz teslimatı oluşturulmamış iş günlüğü kayıtları</p>
+    <% if (!items.length) { %><p class="empty-hint card-elevated pad">Tüm işlerin teslimatı var veya kayıt yok.</p><% } else { %>
+    <div class="table-wrap card-elevated anim-fade-up">
+      <table class="data-table">
+        <thead><tr><th>Kod</th><th>Tarih</th><th>Müşteri</th><th>Proje</th><th></th></tr></thead>
+        <tbody>
+          <% items.forEach(i => { %>
+          <tr class="row-hover">
+            <td><code class="code-tag"><%= i.workCode %></code></td>
+            <td><%= new Date(i.date).toLocaleDateString('tr') %></td>
+            <td><%= i.client ? i.client.name : '' %></td>
+            <td><%= i.projectName||'—' %></td>
+            <td><a href="/deliveries/yeni" class="btn-primary sm">Teslimat aç</a> <a href="/work-logs/<%= i._id %>/duzenle" class="btn-ghost sm">İş</a></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <% } %>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

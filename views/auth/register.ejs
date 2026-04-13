@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body auth-page">
+  <div class="auth-wrap">
+    <a href="/" class="auth-back">← Ana sayfa</a>
+    <div class="auth-card card-elevated">
+      <h1>Kayıt</h1>
+      <% if (isFirstUser) { %>
+      <p class="hint-banner">İlk kullanıcı <strong>yönetici</strong> rolüyle oluşturulur.</p>
+      <% } %>
+      <% if (error) { %><p class="form-error"><%= error %></p><% } %>
+      <form method="post" action="/auth/register" class="form-stack">
+        <label>Ad soyad<input type="text" name="name" required autocomplete="name" /></label>
+        <label>E-posta<input type="email" name="email" required autocomplete="email" /></label>
+        <label>Telefon <span class="subtle">(müşteri portalında gösterilir)</span><input type="tel" name="phone" autocomplete="tel" placeholder="İsteğe bağlı" /></label>
+        <label>Şifre<input type="password" name="password" required minlength="6" autocomplete="new-password" /></label>
+        <label>Şifre tekrar<input type="password" name="password2" required minlength="6" autocomplete="new-password" /></label>
+        <button type="submit" class="btn-primary full">Hesap oluştur</button>
+      </form>
+      <p class="auth-alt">Zaten hesabınız var mı? <a href="/auth/login">Giriş yap</a></p>
+    </div>
+  </div>
+  <%- include('../partials/foot') %>
+</body>
+</html>

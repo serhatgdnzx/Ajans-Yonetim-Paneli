@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body">
+  <%- include('../partials/nav.ejs', { active: 'clients' }) %>
+  <main class="app-main narrow">
+    <h1 class="page-title anim-fade-up"><%= client && client._id ? 'Müşteri düzenle' : 'Müşteri ekle' %></h1>
+    <% if (error) { %><p class="form-error"><%= error %></p><% } %>
+    <% const action = client && client._id ? '/clients/' + client._id + '?_method=PUT' : '/clients'; %>
+    <form method="post" action="<%= action %>" class="form-card card-elevated form-stack anim-fade-up" style="--d:0.06s">
+      <% if (client && client.customerCode) { %>
+      <p class="hint-banner">Müşteri kodu: <strong><%= client.customerCode %></strong> (otomatik; değişmez)</p>
+      <% } %>
+      <label>Ad / unvan *<input type="text" name="name" required value="<%= client ? client.name || '' : '' %>" /></label>
+      <label>Şirket<input type="text" name="company" value="<%= client ? client.company || '' : '' %>" /></label>
+      <label>Sektör<input type="text" name="sector" value="<%= client ? client.sector || '' : '' %>" /></label>
+      <label>Sözleşme başlangıç<input type="date" name="contractStart" value="<%= client && client.contractStart ? new Date(client.contractStart).toISOString().slice(0,10) : '' %>" /></label>
+      <label>Aylık ücret (₺)<input type="number" name="monthlyFee" step="0.01" value="<%= client && client.monthlyFee != null ? client.monthlyFee : '' %>" /></label>
+      <label>İlgili kişi<input type="text" name="contactPerson" value="<%= client ? client.contactPerson || '' : '' %>" /></label>
+      <label>E-posta<input type="email" name="email" value="<%= client ? client.email || '' : '' %>" /></label>
+      <label>Telefon<input type="text" name="phone" value="<%= client ? client.phone || '' : '' %>" /></label>
+      <label>Notlar<textarea name="notes" rows="3"><%= client ? client.notes || '' : '' %></textarea></label>
+
+      <div class="panel portal-setup-panel" style="margin-top:1rem">
+        <h2 class="form-section-title">Müşteri portalı</h2>
+        <p class="subtle">Müşterileriniz giriş yaparak projelerini ve görev durumunu görebilir; proje yöneticisiyle iletişim kurabilir.</p>
+        <label class="checkbox-row">
+          <input type="checkbox" name="portalEnabled" value="true" <%= client && client.portalEnabled ? 'checked' : '' %> />
+          Portal erişimini aç
+        </label>
+        <label>Portal giriş e-postası<input type="email" name="portalEmail" autocomplete="off" placeholder="ornek@musteri.com" value="<%= client && client.portalEmail ? client.portalEmail : '' %>" /></label>
+        <label>Portal şifresi
+          <input type="password" name="portalPassword" autocomplete="new-password" placeholder="<%= client && client._id ? 'Değiştirmek için yeni şifre yazın' : 'En az 6 karakter' %>" />
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <a href="<%= client && client._id ? '/clients/' + client._id + '/detay' : '/clients' %>" class="btn-ghost">İptal</a>
+        <button type="submit" class="btn-primary">Kaydet</button>
+      </div>
+    </form>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

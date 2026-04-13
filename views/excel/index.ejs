@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body">
+  <%- include('../partials/nav', { active: 'excel' }) %>
+  <main class="app-main narrow">
+    <h1 class="page-title anim-fade-up">Excel</h1>
+    <p class="subtle anim-fade-up" style="--d:0.04s">Tüm modülleri dışa aktar veya müşteri listesi içe aktar (ilk sayfa, export şablonuyla uyumlu sütunlar).</p>
+    <% if (error) { %><p class="form-error"><%= error %></p><% } %>
+    <section class="card-elevated pad anim-fade-up" style="--d:0.08s">
+      <h2>Dışa aktar</h2>
+      <p class="subtle">Müşteriler, iş günlüğü, teslimatlar, sosyal, revizyon, aramalar — çok sayfalı .xlsx</p>
+      <a href="/excel/export" class="btn-primary">İndir</a>
+    </section>
+    <section class="card-elevated pad anim-fade-up" style="--d:0.12s; margin-top:1rem">
+      <h2>İçe aktar (müşteri)</h2>
+      <form method="post" action="/excel/import" enctype="multipart/form-data" class="form-stack">
+        <label>.xlsx dosyası<input type="file" name="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required /></label>
+        <button type="submit" class="btn-primary">Yükle</button>
+      </form>
+    </section>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

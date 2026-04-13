@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body">
+  <%- include('../partials/nav', { active: 'projects' }) %>
+  <main class="app-main narrow">
+    <h1 class="page-title"><%= project && project._id ? 'Proje düzenle' : 'Proje ekle' %></h1>
+    <% if (error) { %><p class="form-error"><%= error %></p><% } %>
+    <% const action = project && project._id ? '/projects/' + project._id + '?_method=PUT' : '/projects'; %>
+    <form method="post" action="<%= action %>" class="form-card card-elevated form-stack">
+      <label>Başlık *<input type="text" name="title" required value="<%= project ? project.title || '' : '' %>" /></label>
+      <label>Açıklama<textarea name="description" rows="3"><%= project ? project.description || '' : '' %></textarea></label>
+      <label>Müşteri *
+        <select name="client" required>
+          <option value="">Seçin</option>
+          <% const selCid = project && project.client ? String(project.client._id || project.client) : ''; %>
+          <% clients.forEach(c => { %>
+          <option value="<%= c._id %>" <%= selCid === String(c._id) ? 'selected' : '' %>><%= c.name %></option>
+          <% }) %>
+        </select>
+      </label>
+      <label>Proje yöneticisi
+        <select name="owner">
+          <option value="">— Oluşturan ekip üyesi (varsayılan) —</option>
+          <% const selOid = project && project.owner ? String(project.owner._id || project.owner) : ''; %>
+          <% (users || []).forEach(u => { %>
+          <option value="<%= u._id %>" <%= selOid === String(u._id) ? 'selected' : '' %>><%= u.name %><% if (u.email) { %> (<%= u.email %>)<% } %></option>
+          <% }) %>
+        </select>
+      </label>
+      <p class="subtle" style="margin:-0.5rem 0 0.5rem">Müşteri portalında bu kişi “iletişim” olarak gösterilir.</p>
+      <label>Durum
+        <select name="status">
+          <option value="devam_ediyor" <%= project && project.status !== 'bitti' ? 'selected' : '' %>>Devam ediyor</option>
+          <option value="bitti" <%= project && project.status === 'bitti' ? 'selected' : '' %>>Bitti</option>
+        </select>
+      </label>
+      <label>Son tarih<input type="date" name="deadline" value="<%= project && project.deadline ? new Date(project.deadline).toISOString().slice(0,10) : '' %>" /></label>
+      <div class="form-actions">
+        <a href="/projects" class="btn-ghost">İptal</a>
+        <button type="submit" class="btn-primary">Kaydet</button>
+      </div>
+    </form>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

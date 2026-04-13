@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body">
+  <%- include('../partials/nav', { active: 'deliveries' }) %>
+  <main class="app-main">
+    <div class="page-head">
+      <h1 class="page-title">Teslimatlar</h1>
+      <a href="/deliveries/yeni" class="btn-primary">Yeni teslimat</a>
+    </div>
+    <% if (!items.length) { %><p class="empty-hint">Kayıt yok.</p><% } else { %>
+    <div class="table-wrap card-elevated">
+      <table class="data-table">
+        <thead><tr><th>Kod</th><th>Müşteri</th><th>İş</th><th>Başlık</th><th>Tür</th><th>Durum</th><th></th></tr></thead>
+        <tbody>
+          <% items.forEach(d => { %>
+          <tr class="row-hover">
+            <td><code class="code-tag"><%= d.deliveryCode %></code></td>
+            <td><%= d.client ? d.client.name : '' %></td>
+            <td><%= d.workLog ? d.workLog.workCode : '—' %></td>
+            <td><%= d.title||'—' %></td>
+            <td><%= d.deliveryType||'—' %></td>
+            <td><span class="tag"><%= d.status %></span></td>
+            <td class="row-actions">
+              <a href="/deliveries/<%= d._id %>/duzenle" class="btn-ghost sm">Düzenle</a>
+              <% if (currentUser.role === 'admin') { %>
+              <form action="/deliveries/<%= d._id %>?_method=DELETE" method="post" class="inline-form" data-swal-delete><button type="submit" class="btn-danger sm">Sil</button></form>
+              <% } %>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <% } %>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body">
+  <%- include('../partials/nav', { active: 'calls' }) %>
+  <main class="app-main narrow">
+    <h1 class="page-title"><%= item && item._id ? 'Arama düzenle' : 'Arama kaydı' %></h1>
+    <% if (error) { %><p class="form-error"><%= error %></p><% } %>
+    <% const action = item && item._id ? '/calls/' + item._id + '?_method=PUT' : '/calls'; %>
+    <form method="post" action="<%= action %>" class="form-card card-elevated form-stack">
+      <label>Müşteri *<select name="client" required><% clients.forEach(c => { %><option value="<%= c._id %>" <%= item && String(item.client)===String(c._id)?'selected':'' %>><%= c.name %></option><% }) %></select></label>
+      <label>Tarih *<input type="date" name="date" required value="<%= item && item.date ? new Date(item.date).toISOString().slice(0,10) : new Date().toISOString().slice(0,10) %>" /></label>
+      <label>Arayan / aranan<input type="text" name="callerCallee" value="<%= item?item.callerCallee||'':'' %>" /></label>
+      <label>Konu<textarea name="subject" rows="2"><%= item?item.subject||'':'' %></textarea></label>
+      <label>Sonuç<input type="text" name="result" placeholder="Not alındı, tamamlandı..." value="<%= item?item.result||'':'' %>" /></label>
+      <label>Sorumlu<input type="text" name="responsiblePerson" value="<%= item?item.responsiblePerson||'':'' %>" /></label>
+      <label>Geri dönüş tarihi<input type="date" name="callbackDate" value="<%= item && item.callbackDate ? new Date(item.callbackDate).toISOString().slice(0,10) : '' %>" /></label>
+      <label>Notlar<textarea name="notes" rows="2"><%= item?item.notes||'':'' %></textarea></label>
+      <label>Durum<input type="text" name="status" value="<%= item?item.status||'Bekliyor':'Bekliyor' %>" /></label>
+      <div class="form-actions"><a href="/calls" class="btn-ghost">İptal</a><button type="submit" class="btn-primary">Kaydet</button></div>
+    </form>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

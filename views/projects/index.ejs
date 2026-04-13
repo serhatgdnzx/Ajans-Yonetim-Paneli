@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body">
+  <%- include('../partials/nav', { active: 'projects' }) %>
+  <main class="app-main">
+    <div class="page-head">
+      <h1 class="page-title">Projeler</h1>
+      <a href="/projects/yeni" class="btn-primary">Proje ekle</a>
+    </div>
+    <% if (!projects.length) { %>
+    <p class="empty-hint">Proje yok. <a href="/projects/yeni">Yeni proje</a></p>
+    <% } else { %>
+    <div class="project-cards">
+      <% projects.forEach(p => { %>
+      <article class="project-card card-elevated">
+        <div class="project-card-head">
+          <a href="/projects/<%= p._id %>"><h2><%= p.title %></h2></a>
+          <span class="tag <%= p.status === 'bitti' ? 'tag-done' : '' %>"><%= p.status === 'bitti' ? 'Bitti' : 'Devam ediyor' %></span>
+        </div>
+        <% if (p.client) { %><p class="project-client"><%= p.client.name %><% if (p.client.company) { %> · <%= p.client.company %><% } %></p><% } %>
+        <div class="project-card-actions">
+          <a href="/projects/<%= p._id %>" class="btn-ghost sm">Panoya git</a>
+          <a href="/projects/<%= p._id %>/duzenle" class="btn-ghost sm">Düzenle</a>
+          <% if (currentUser.role === 'admin') { %>
+          <form action="/projects/<%= p._id %>?_method=DELETE" method="post" class="inline-form" data-swal-delete data-swal-title="Proje ve tüm görevler silinsin mi?">
+            <button type="submit" class="btn-danger sm">Sil</button>
+          </form>
+          <% } %>
+        </div>
+      </article>
+      <% }) %>
+    </div>
+    <% } %>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

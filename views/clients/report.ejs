@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body">
+  <%- include('../partials/nav', { active: 'clients' }) %>
+  <main class="app-main">
+    <div class="page-head">
+      <h1 class="page-title">Rapor: <%= client.name %></h1>
+      <a href="/clients/<%= client._id %>/detay" class="btn-ghost">← Detay</a>
+    </div>
+    <form method="get" class="filter-bar card-elevated anim-fade-up">
+      <label>Filtre
+        <select name="filtre" onchange="this.form.submit()">
+          <option value="tumu" <%= filtre==='tumu'?'selected':'' %>>Tümü</option>
+          <option value="ay" <%= filtre==='ay'?'selected':'' %>>Bu ay</option>
+          <option value="yil" <%= filtre==='yil'?'selected':'' %>>Bu yıl</option>
+          <option value="6ay" <%= filtre==='6ay'?'selected':'' %>>Son 6 ay</option>
+        </select>
+      </label>
+    </form>
+    <div class="kpi-grid small anim-stagger" style="margin-top:1rem">
+      <div class="kpi-card"><span class="stat-label">Saat</span><strong class="kpi-value"><%= toplamSaat %></strong></div>
+      <div class="kpi-card"><span class="stat-label">İş</span><strong class="kpi-value"><%= toplamIs %></strong></div>
+      <div class="kpi-card"><span class="stat-label">Teslimat</span><strong class="kpi-value"><%= toplamTeslimat %></strong></div>
+      <div class="kpi-card"><span class="stat-label">Onaylı teslimat</span><strong class="kpi-value"><%= onaylananTeslimat %></strong></div>
+      <div class="kpi-card"><span class="stat-label">Revizyon</span><strong class="kpi-value"><%= toplamRevizyon %></strong></div>
+    </div>
+    <div class="table-wrap card-elevated" style="margin-top:1rem">
+      <h2 class="panel-title-inline">İş günlüğü</h2>
+      <table class="data-table">
+        <thead><tr><th>Kod</th><th>Tarih</th><th>Proje</th><th>Durum</th><th>Dk</th></tr></thead>
+        <tbody>
+          <% workLogs.forEach(w => { %>
+          <tr><td><%= w.workCode %></td><td><%= new Date(w.date).toLocaleDateString('tr') %></td><td><%= w.projectName||'—' %></td><td><%= w.status %></td><td><%= w.durationMinutes||0 %></td></tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

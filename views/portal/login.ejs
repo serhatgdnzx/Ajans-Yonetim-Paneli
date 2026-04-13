@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body portal-body">
+  <header class="portal-header">
+    <a href="/" class="logo">Ajans<span>Flow</span></a>
+    <span class="portal-badge">Müşteri alanı</span>
+  </header>
+  <main class="app-main narrow">
+    <h1 class="page-title anim-fade-up">Müşteri girişi</h1>
+    <p class="subtle anim-fade-up" style="--d:0.04s">Size atanmış projelerin durumunu buradan takip edebilirsiniz.</p>
+    <% if (error) { %><p class="form-error anim-fade-up"><%= error %></p><% } %>
+    <form method="post" action="/portal/login" class="form-card card-elevated form-stack anim-fade-up" style="--d:0.06s">
+      <label>Portal e-postası<input type="email" name="email" required autocomplete="username" /></label>
+      <label>Şifre<input type="password" name="password" required autocomplete="current-password" /></label>
+      <div class="form-actions">
+        <a href="/" class="btn-ghost">Ana sayfa</a>
+        <button type="submit" class="btn-primary">Giriş</button>
+      </div>
+    </form>
+    <p class="subtle hint-banner" style="margin-top:1.5rem">Giriş bilgileri için ajansınızla iletişime geçin. Ekibimiz için <a href="/auth/login">buradan</a> giriş yapılır.</p>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

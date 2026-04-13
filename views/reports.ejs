@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body class="app-body">
+  <%- include('partials/nav', { active: 'reports' }) %>
+  <main class="app-main">
+    <h1 class="page-title">Raporlar</h1>
+
+    <div class="report-grid">
+      <div class="stat-card card-elevated">
+        <span class="stat-label">Toplam müşteri</span>
+        <strong class="stat-value"><%= clients %></strong>
+      </div>
+      <div class="stat-card card-elevated accent">
+        <span class="stat-label">Devam eden proje</span>
+        <strong class="stat-value"><%= statusMap.devam_ediyor %></strong>
+      </div>
+      <div class="stat-card card-elevated muted">
+        <span class="stat-label">Biten proje</span>
+        <strong class="stat-value"><%= statusMap.bitti %></strong>
+      </div>
+      <div class="stat-card card-elevated">
+        <span class="stat-label">Görev tamamlanma</span>
+        <strong class="stat-value"><%= completionRate %>%</strong>
+        <small class="subtle"><%= colMap.bitti %> / <%= totalTasks %> görev bitti</small>
+      </div>
+    </div>
+
+    <section class="panel report-bars card-elevated">
+      <h2>Görevler (sütun)</h2>
+      <div class="bar-chart">
+        <% const maxT = Math.max(colMap.yapilacak, colMap.devam, colMap.bitti, 1); %>
+        <div class="bar-row"><span>Yapılacak</span><div class="bar"><i style="width:<%= (colMap.yapilacak/maxT)*100 %>%"></i></div><em><%= colMap.yapilacak %></em></div>
+        <div class="bar-row"><span>Devam</span><div class="bar"><i style="width:<%= (colMap.devam/maxT)*100 %>%"></i></div><em><%= colMap.devam %></em></div>
+        <div class="bar-row"><span>Bitti</span><div class="bar bar-done"><i style="width:<%= (colMap.bitti/maxT)*100 %>%"></i></div><em><%= colMap.bitti %></em></div>
+      </div>
+    </section>
+
+    <section class="panel card-elevated">
+      <h2>Son projeler</h2>
+      <% if (!projectList.length) { %>
+      <p class="empty-hint">Veri yok.</p>
+      <% } else { %>
+      <ul class="link-list">
+        <% projectList.forEach(p => { %>
+        <li>
+          <a href="/projects/<%= p._id %>"><%= p.title %></a>
+          <span class="tag <%= p.status === 'bitti' ? 'tag-done' : '' %>"><%= p.status === 'bitti' ? 'Bitti' : 'Devam' %></span>
+          <% if (p.client) { %><small><%= p.client.name %></small><% } %>
+        </li>
+        <% }) %>
+      </ul>
+      <% } %>
+    </section>
+  </main>
+  <%- include('partials/foot') %>
+</body>
+</html>

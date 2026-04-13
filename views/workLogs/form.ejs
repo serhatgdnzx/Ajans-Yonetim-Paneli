@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body">
+  <%- include('../partials/nav', { active: 'workLogs' }) %>
+  <main class="app-main narrow">
+    <h1 class="page-title"><%= item && item._id ? 'İş düzenle' : 'İş ekle' %></h1>
+    <% if (item && item.workCode) { %><p class="hint-banner">Kod: <strong><%= item.workCode %></strong></p><% } %>
+    <% if (error) { %><p class="form-error"><%= error %></p><% } %>
+    <% const action = item && item._id ? '/work-logs/' + item._id + '?_method=PUT' : '/work-logs'; %>
+    <form method="post" action="<%= action %>" class="form-card card-elevated form-stack">
+      <label>Müşteri *
+        <select name="client" required>
+          <% clients.forEach(c => { %>
+          <option value="<%= c._id %>" <%= item && String(item.client) === String(c._id) ? 'selected' : '' %>><%= c.customerCode ? c.customerCode + ' — ' : '' %><%= c.name %></option>
+          <% }) %>
+        </select>
+      </label>
+      <label>Tarih *<input type="date" name="date" required value="<%= item && item.date ? new Date(item.date).toISOString().slice(0,10) : new Date().toISOString().slice(0,10) %>" /></label>
+      <label>Proje<input type="text" name="projectName" value="<%= item ? item.projectName||'' : '' %>" /></label>
+      <label>Aktivite türü<input type="text" name="activityType" value="<%= item ? item.activityType||'' : '' %>" placeholder="Tasarım, metin, video..." /></label>
+      <label>Açıklama<textarea name="description" rows="2"><%= item ? item.description||'' : '' %></textarea></label>
+      <label>Sorumlu<input type="text" name="responsiblePerson" value="<%= item ? item.responsiblePerson||'' : '' %>" /></label>
+      <label>Süre (dakika)<input type="number" name="durationMinutes" min="0" value="<%= item ? item.durationMinutes||0 : 0 %>" /></label>
+      <label>Etiketler<input type="text" name="tags" value="<%= item ? item.tags||'' : '' %>" /></label>
+      <label>Durum
+        <select name="status">
+          <% ['Bekliyor','Revizede','Onayda','Onaylandı','Reddedildi'].forEach(s => { %>
+          <option value="<%= s %>" <%= item && item.status===s ? 'selected' : (!item && s==='Bekliyor' ? 'selected' : '') %>><%= s %></option>
+          <% }) %>
+        </select>
+      </label>
+      <% if (item && item._id) { %>
+      <label>Revizyon sayısı<input type="number" name="revisionCount" min="0" value="<%= item.revisionCount||0 %>" /></label>
+      <% } %>
+      <label>Ne yapıldı<textarea name="whatWasDone" rows="2"><%= item ? item.whatWasDone||'' : '' %></textarea></label>
+      <div class="form-actions">
+        <a href="/work-logs" class="btn-ghost">İptal</a>
+        <button type="submit" class="btn-primary">Kaydet</button>
+      </div>
+    </form>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body">
+  <%- include('../partials/nav', { active: 'workLogs' }) %>
+  <main class="app-main">
+    <div class="page-head">
+      <h1 class="page-title anim-fade-up">İş günlüğü</h1>
+      <a href="/work-logs/yeni" class="btn-primary">Yeni iş</a>
+    </div>
+    <% if (!items.length) { %>
+    <p class="empty-hint">Kayıt yok.</p>
+    <% } else { %>
+    <div class="table-wrap card-elevated">
+      <table class="data-table">
+        <thead>
+          <tr><th>Kod</th><th>Tarih</th><th>Müşteri</th><th>Proje</th><th>Aktivite</th><th>Dk</th><th>Durum</th><th></th></tr>
+        </thead>
+        <tbody>
+          <% items.forEach(i => { %>
+          <tr class="row-hover">
+            <td><code class="code-tag"><%= i.workCode %></code></td>
+            <td><%= new Date(i.date).toLocaleDateString('tr') %></td>
+            <td><%= i.client ? (i.client.customerCode||'') + ' ' + i.client.name : '' %></td>
+            <td><%= i.projectName||'—' %></td>
+            <td><%= i.activityType||'—' %></td>
+            <td><%= i.durationMinutes||0 %></td>
+            <td><span class="tag"><%= i.status %></span></td>
+            <td class="row-actions">
+              <a href="/work-logs/<%= i._id %>/duzenle" class="btn-ghost sm">Düzenle</a>
+              <% if (currentUser.role === 'admin') { %>
+              <form action="/work-logs/<%= i._id %>?_method=DELETE" method="post" class="inline-form" data-swal-delete data-swal-title="Bu iş kaydı silinsin mi?">
+                <button type="submit" class="btn-danger sm">Sil</button>
+              </form>
+              <% } %>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <% } %>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

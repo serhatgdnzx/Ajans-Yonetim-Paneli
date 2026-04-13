@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ajans · Müşteri & proje takibi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/landing.css" />
+</head>
+<body class="landing-body">
+  <div class="landing-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <header class="landing-header" data-reveal>
+    <a class="landing-logo" href="/">Ajans<span>Flow</span></a>
+    <nav class="landing-nav">
+      <a href="#ozellikler">Özellikler</a>
+      <a href="#akış">Akış</a>
+      <a href="/portal/login" class="btn-landing-ghost">Müşteri girişi</a>
+      <a href="/auth/login" class="btn-landing-outline">Ekip girişi</a>
+      <a href="/auth/register" class="btn-landing-primary">Başla</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <p class="hero-eyebrow" data-reveal style="--d:0.05s">Ajanslar için</p>
+        <h1 class="hero-title" data-reveal style="--d:0.12s">
+          Müşteri ve proje takibi,<br />
+          <span class="gradient-text">tek panelde</span>
+        </h1>
+        <p class="hero-lead" data-reveal style="--d:0.2s">
+          Müşterilerinizi kaydedin, projelerin durumunu izleyin, Trello tarzı görev panosu ve raporlarla ekibinizi hizalayın.
+        </p>
+        <div class="hero-cta" data-reveal style="--d:0.28s">
+          <a href="/auth/register" class="btn-landing-primary lg">Ücretsiz dene</a>
+          <a href="/auth/login" class="btn-landing-ghost lg">Ekip girişi</a>
+          <a href="/portal/login" class="btn-landing-outline lg">Müşteri takibi</a>
+        </div>
+        <div class="hero-stats" data-reveal style="--d:0.36s">
+          <div><strong>MongoDB</strong><span>güvenli veri</span></div>
+          <div><strong>Roller</strong><span>admin & çalışan</span></div>
+          <div><strong>EJS</strong><span>hızlı arayüz</span></div>
+        </div>
+      </div>
+      <div class="hero-visual" data-reveal style="--d:0.22s">
+        <div class="mock-card mock-float">
+          <div class="mock-bar"></div>
+          <div class="mock-columns">
+            <div class="mock-col"><span></span><span></span></div>
+            <div class="mock-col active"><span></span><span></span><span></span></div>
+            <div class="mock-col"><span></span></div>
+          </div>
+        </div>
+        <div class="mock-glow"></div>
+      </div>
+    </section>
+
+    <section id="ozellikler" class="features">
+      <h2 data-reveal>Özellikler</h2>
+      <div class="feature-grid">
+        <article class="feature-card" data-reveal style="--d:0.05s">
+          <div class="feature-icon">◎</div>
+          <h3>Müşteri yönetimi</h3>
+          <p>Şirket, iletişim ve notlarla müşteri kartları oluşturun.</p>
+        </article>
+        <article class="feature-card" data-reveal style="--d:0.1s">
+          <div class="feature-icon">◈</div>
+          <h3>Proje durumu</h3>
+          <p>Devam ediyor veya bitti — net görünürlük, son teslim tarihi.</p>
+        </article>
+        <article class="feature-card" data-reveal style="--d:0.15s">
+          <div class="feature-icon">▣</div>
+          <h3>Görev panosu</h3>
+          <p>Yapılacak, devam, bitti sütunları; sürükle-bırak ile güncelleme.</p>
+        </article>
+        <article class="feature-card" data-reveal style="--d:0.2s">
+          <div class="feature-icon">◇</div>
+          <h3>Raporlama</h3>
+          <p>Özet sayılar, tamamlanma oranı ve proje listesi.</p>
+        </article>
+        <article class="feature-card" data-reveal style="--d:0.25s">
+          <div class="feature-icon">☎</div>
+          <h3>CRM & teslimat</h3>
+          <p>İş günlüğü, teslimat kodları, sosyal metrikler, revizyon ve arama kayıtları — Excel ile aktarım.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="akış" class="flow-section">
+      <div class="flow-inner">
+        <h2 data-reveal>Basit akış</h2>
+        <ol class="flow-steps">
+          <li data-reveal style="--d:0.05s"><span>1</span> Müşteri ekle</li>
+          <li data-reveal style="--d:0.12s"><span>2</span> Proje bağla</li>
+          <li data-reveal style="--d:0.19s"><span>3</span> Görevleri panoda taşı</li>
+          <li data-reveal style="--d:0.26s"><span>4</span> Raporla</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="cta-bottom" data-reveal>
+      <h2>Hazır mısınız?</h2>
+      <p>İlk kullanıcı otomatik yönetici olur; ekibinizi sonra davet edin.</p>
+      <a href="/auth/register" class="btn-landing-primary lg">Panele giriş</a>
+    </section>
+  </main>
+
+  <footer class="landing-footer">
+    <span>Ajans Yönetim Paneli · Node.js · EJS · MongoDB</span>
+  </footer>
+
+  <script src="/js/landing.js"></script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body class="app-body page-enter">
+  <%- include('partials/nav', { active: 'dashboard' }) %>
+  <main class="app-main dashboard-page">
+   
+    <p class="subtle anim-fade-up" style="--d:0.05s"></p>
+
+    <div class="kpi-grid anim-stagger">
+      <div class="kpi-card">
+        <span class="kpi-icon">◎</span>
+        <div>
+          <span class="stat-label">Müşteri</span>
+          <strong class="kpi-value"><%= metrics.toplam_musteri %></strong>
+        </div>
+      </div>
+      <div class="kpi-card accent">
+        <span class="kpi-icon">▣</span>
+        <div>
+          <span class="stat-label">Bu ay iş</span>
+          <strong class="kpi-value"><%= metrics.bu_ay_is %></strong>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-icon">✓</span>
+        <div>
+          <span class="stat-label">Onaylı teslimat</span>
+          <strong class="kpi-value"><%= metrics.onaylanan_teslimat %></strong>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-icon">⏱</span>
+        <div>
+          <span class="stat-label">Toplam saat</span>
+          <strong class="kpi-value"><%= metrics.toplam_saat %></strong>
+        </div>
+      </div>
+      <div class="kpi-card muted">
+        <span class="kpi-icon">▶</span>
+        <div>
+          <span class="stat-label">Reels</span>
+          <strong class="kpi-value"><%= metrics.reels_sayisi %></strong>
+        </div>
+      </div>
+      <div class="kpi-card warn">
+        <span class="kpi-icon">!</span>
+        <div>
+          <span class="stat-label">Bekleyen teslimat</span>
+          <strong class="kpi-value"><%= metrics.bekleyen_teslimat %></strong>
+        </div>
+      </div>
+      <div class="kpi-card warn">
+        <span class="kpi-icon">…</span>
+        <div>
+          <span class="stat-label">Teslimatsız iş</span>
+          <strong class="kpi-value"><%= metrics.bekleyen_isler %></strong>
+        </div>
+      </div>
+      <div class="kpi-card accent-soft">
+        <span class="kpi-icon">◇</span>
+        <div>
+          <span class="stat-label">Bu ay saat</span>
+          <strong class="kpi-value"><%= metrics.bu_ay_saat %></strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-grid" style="margin-top:1.25rem">
+      <div class="stat-card anim-fade-up" style="--d:0.1s">
+        <span class="stat-label">Aktif proje</span>
+        <strong class="stat-value"><%= projectActive %></strong>
+      </div>
+      <div class="stat-card muted anim-fade-up" style="--d:0.14s">
+        <span class="stat-label">Biten proje</span>
+        <strong class="stat-value"><%= projectDone %></strong>
+      </div>
+      <div class="stat-card anim-fade-up" style="--d:0.18s">
+        <span class="stat-label">Kanban görev</span>
+        <strong class="stat-value"><%= tasksByCol.yapilacak + tasksByCol.devam + tasksByCol.bitti %></strong>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <section class="panel chart-panel anim-fade-up" style="--d:0.08s">
+        <h2>İş tipi dağılımı</h2>
+        <div class="chart-canvas-wrap"><canvas id="chartTipi"></canvas></div>
+      </section>
+      <section class="panel chart-panel anim-fade-up" style="--d:0.12s">
+        <h2>Günlük iş (30 gün)</h2>
+        <div class="chart-canvas-wrap tall"><canvas id="chartGunluk"></canvas></div>
+      </section>
+      <section class="panel chart-panel anim-fade-up" style="--d:0.16s">
+        <h2>Kişi başı iş</h2>
+        <div class="chart-canvas-wrap"><canvas id="chartKisi"></canvas></div>
+      </section>
+      <section class="panel chart-panel anim-fade-up" style="--d:0.2s">
+        <h2>Teslimat durumu</h2>
+        <div class="chart-canvas-wrap"><canvas id="chartTeslimat"></canvas></div>
+      </section>
+    </div>
+
+    <div class="dashboard-split" style="margin-top:1.25rem">
+      <section class="panel anim-fade-up" style="--d:0.1s">
+        <h2>Görev sütunları</h2>
+        <ul class="mini-bars">
+          <li><span>Yapılacak</span><em><%= tasksByCol.yapilacak %></em></li>
+          <li><span>Devam</span><em><%= tasksByCol.devam %></em></li>
+          <li><span>Bitti</span><em><%= tasksByCol.bitti %></em></li>
+        </ul>
+      </section>
+      <section class="panel anim-fade-up" style="--d:0.14s">
+        <h2>Son projeler</h2>
+        <% if (!recentProjects.length) { %>
+        <p class="empty-hint">Henüz proje yok. <a href="/projects/yeni">Proje ekle</a></p>
+        <% } else { %>
+        <ul class="link-list">
+          <% recentProjects.forEach(p => { %>
+          <li>
+            <a href="/projects/<%= p._id %>"><%= p.title %></a>
+            <span class="tag <%= p.status === 'bitti' ? 'tag-done' : '' %>"><%= p.status === 'bitti' ? 'Bitti' : 'Devam' %></span>
+            <% if (p.client) { %><small><%= p.client.name %></small><% } %>
+          </li>
+          <% }) %>
+        </ul>
+        <% } %>
+      </section>
+    </div>
+  </main>
+  <% 
+    const tipiLabels = Object.keys(isTipiDagilimi || {});
+    const tipiData = tipiLabels.map(k => isTipiDagilimi[k]);
+    const gunKeys = Object.keys(gunlukIsAdedi || {}).sort();
+    const gunData = gunKeys.map(k => gunlukIsAdedi[k]);
+    const kisiLabels = (kisiBasiIs || []).map(x => x[0]);
+    const kisiData = (kisiBasiIs || []).map(x => x[1]);
+    const tesLabels = Object.keys(teslimatDurum || {});
+    const tesData = tesLabels.map(k => teslimatDurum[k]);
+  %>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script>
+    (function () {
+      var tipiLabels = <%- JSON.stringify(tipiLabels) %>;
+      var tipiData = <%- JSON.stringify(tipiData) %>;
+      var gunKeys = <%- JSON.stringify(gunKeys) %>;
+      var gunData = <%- JSON.stringify(gunData) %>;
+      var kisiLabels = <%- JSON.stringify(kisiLabels) %>;
+      var kisiData = <%- JSON.stringify(kisiData) %>;
+      var tesLabels = <%- JSON.stringify(tesLabels) %>;
+      var tesData = <%- JSON.stringify(tesData) %>;
+      var colors = ['#6366f1', '#22d3ee', '#a78bfa', '#34d399', '#f472b6', '#fbbf24', '#94a3b8'];
+      if (typeof Chart === 'undefined') return;
+      var elTipi = document.getElementById('chartTipi');
+      if (elTipi && tipiLabels.length) {
+        new Chart(elTipi, {
+          type: 'doughnut',
+          data: {
+            labels: tipiLabels,
+            datasets: [{ data: tipiData, backgroundColor: colors, borderWidth: 0 }]
+          },
+          options: { plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } }, cutout: '58%' }
+        });
+      }
+      var elGun = document.getElementById('chartGunluk');
+      if (elGun && gunKeys.length) {
+        new Chart(elGun, {
+          type: 'line',
+          data: {
+            labels: gunKeys,
+            datasets: [{
+              label: 'İş adedi',
+              data: gunData,
+              borderColor: '#6366f1',
+              backgroundColor: 'rgba(99,102,241,0.15)',
+              fill: true,
+              tension: 0.35
+            }]
+          },
+          options: {
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { ticks: { color: '#8b92a8', maxRotation: 45 } },
+              y: { ticks: { color: '#8b92a8' }, beginAtZero: true }
+            }
+          }
+        });
+      }
+      var elKisi = document.getElementById('chartKisi');
+      if (elKisi && kisiLabels.length) {
+        new Chart(elKisi, {
+          type: 'bar',
+          data: {
+            labels: kisiLabels,
+            datasets: [{ label: 'İş', data: kisiData, backgroundColor: '#22d3ee', borderRadius: 8 }]
+          },
+          options: {
+            indexAxis: 'y',
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { ticks: { color: '#8b92a8' }, beginAtZero: true },
+              y: { ticks: { color: '#8b92a8' } }
+            }
+          }
+        });
+      }
+      var elTes = document.getElementById('chartTeslimat');
+      if (elTes && tesLabels.length) {
+        new Chart(elTes, {
+          type: 'doughnut',
+          data: {
+            labels: tesLabels,
+            datasets: [{ data: tesData, backgroundColor: colors, borderWidth: 0 }]
+          },
+          options: { plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } }, cutout: '55%' }
+        });
+      }
+    })();
+  </script>
+  <%- include('partials/foot') %>
+</body>
+</html>

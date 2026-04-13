@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body">
+  <%- include('../partials/nav', { active: 'social' }) %>
+  <main class="app-main narrow">
+    <h1 class="page-title"><%= item && item._id ? 'Düzenle' : 'Sosyal kayıt' %></h1>
+    <% if (error) { %><p class="form-error"><%= error %></p><% } %>
+    <% const action = item && item._id ? '/social/' + item._id + '?_method=PUT' : '/social'; %>
+    <form method="post" action="<%= action %>" class="form-card card-elevated form-stack">
+      <label>Müşteri *<select name="client" required><% clients.forEach(c => { %><option value="<%= c._id %>" <%= item && String(item.client)===String(c._id)?'selected':'' %>><%= c.name %></option><% }) %></select></label>
+      <label>Tarih *<input type="date" name="date" required value="<%= item && item.date ? new Date(item.date).toISOString().slice(0,10) : new Date().toISOString().slice(0,10) %>" /></label>
+      <label>İş (opsiyonel)<select name="workLog"><option value="">—</option><% workLogs.forEach(w => { %><option value="<%= w._id %>" <%= item && item.workLog && String(item.workLog)===String(w._id)?'selected':'' %>><%= w.workCode %></option><% }) %></select></label>
+      <label>Platform<input type="text" name="platform" value="<%= item?item.platform||'':'' %>" /></label>
+      <label>İçerik başlığı<input type="text" name="contentTitle" value="<%= item?item.contentTitle||'':'' %>" /></label>
+      <label>Gönderi türü<input type="text" name="postType" placeholder="Reels, Post, Story" value="<%= item?item.postType||'':'' %>" /></label>
+      <div class="grid-2">
+        <label>Etkileşim<input type="number" name="interaction" value="<%= item && item.interaction != null ? item.interaction : 0 %>" /></label>
+        <label>Görüntülenme<input type="number" name="views" value="<%= item && item.views != null ? item.views : 0 %>" /></label>
+        <label>Beğeni<input type="number" name="likes" value="<%= item && item.likes != null ? item.likes : 0 %>" /></label>
+        <label>Yorum<input type="number" name="comments" value="<%= item && item.comments != null ? item.comments : 0 %>" /></label>
+        <label>Paylaşım<input type="number" name="shares" value="<%= item && item.shares != null ? item.shares : 0 %>" /></label>
+      </div>
+      <label>Durum<input type="text" name="status" value="<%= item?item.status||'Yayında':'Yayında' %>" /></label>
+      <div class="form-actions"><a href="/social" class="btn-ghost">İptal</a><button type="submit" class="btn-primary">Kaydet</button></div>
+    </form>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

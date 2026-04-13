@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body auth-page">
+  <div class="auth-wrap">
+    <a href="/" class="auth-back">← Ana sayfa</a>
+    <div class="auth-card card-elevated">
+      <h1>Giriş</h1>
+      <% if (error) { %><p class="form-error"><%= error %></p><% } %>
+      <form method="post" action="/auth/login" class="form-stack">
+        <label>E-posta<input type="email" name="email" required autocomplete="email" /></label>
+        <label>Şifre<input type="password" name="password" required autocomplete="current-password" /></label>
+        <button type="submit" class="btn-primary full">Giriş yap</button>
+      </form>
+      <p class="auth-alt">Hesabınız yok mu? <a href="/auth/register">Kayıt ol</a></p>
+    </div>
+  </div>
+  <%- include('../partials/foot') %>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body">
+  <%- include('../partials/nav', { active: 'revisions' }) %>
+  <main class="app-main">
+    <div class="page-head">
+      <h1 class="page-title">Revizyonlar</h1>
+      <a href="/revisions/yeni" class="btn-primary">Ekle</a>
+    </div>
+    <% if (!items.length) { %><p class="empty-hint">Kayıt yok.</p><% } else { %>
+    <div class="table-wrap card-elevated">
+      <table class="data-table">
+        <thead><tr><th>Tarih</th><th>Müşteri</th><th>No</th><th>Başlık</th><th>Durum</th><th></th></tr></thead>
+        <tbody>
+          <% items.forEach(r => { %>
+          <tr class="row-hover">
+            <td><%= new Date(r.date).toLocaleDateString('tr') %></td>
+            <td><%= r.client ? r.client.name : '' %></td>
+            <td><%= r.revisionNumber %></td>
+            <td><%= r.title||'—' %></td>
+            <td><span class="tag"><%= r.status %></span></td>
+            <td class="row-actions">
+              <a href="/revisions/<%= r._id %>/duzenle" class="btn-ghost sm">Düzenle</a>
+              <% if (currentUser.role === 'admin') { %>
+              <form action="/revisions/<%= r._id %>?_method=DELETE" method="post" class="inline-form" data-swal-delete><button type="submit" class="btn-danger sm">Sil</button></form>
+              <% } %>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <% } %>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

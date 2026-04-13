@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body portal-body">
+  <header class="portal-header">
+    <a href="/portal" class="logo">Ajans<span>Flow</span></a>
+    <nav class="portal-nav">
+      <span class="portal-user"><%= portalClient.name %></span>
+      <form action="/portal/logout" method="post" class="logout-form"><button type="submit" class="btn-ghost sm">Çıkış</button></form>
+    </nav>
+  </header>
+  <main class="app-main">
+    <div class="page-head">
+      <div>
+        <h1 class="page-title anim-fade-up">Projelerim</h1>
+        <p class="subtle anim-fade-up" style="--d:0.04s">Güncel durum ve proje yöneticinizle iletişim için bir projeyi açın.</p>
+      </div>
+    </div>
+    <% if (!projects.length) { %>
+    <p class="empty-hint card-elevated" style="padding:2rem">Henüz size atanmış proje yok.</p>
+    <% } else { %>
+    <div class="project-grid anim-stagger">
+      <% projects.forEach(p => { %>
+      <article class="project-card card-elevated">
+        <h2><a href="/portal/projeler/<%= p._id %>"><%= p.title %></a></h2>
+        <p class="subtle"><%= statusLabel[p.status] || p.status %></p>
+        <% if (p.deadline) { %><p class="hint-banner">Son tarih: <%= new Date(p.deadline).toLocaleDateString('tr') %></p><% } %>
+        <% if (p.owner) { %>
+        <p class="portal-pm">Proje yöneticisi: <strong><%= p.owner.name %></strong></p>
+        <% } %>
+        <a href="/portal/projeler/<%= p._id %>" class="btn-primary sm">Detay &amp; iletişim</a>
+      </article>
+      <% }) %>
+    </div>
+    <% } %>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

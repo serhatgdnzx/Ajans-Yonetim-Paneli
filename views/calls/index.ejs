@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body">
+  <%- include('../partials/nav', { active: 'calls' }) %>
+  <main class="app-main">
+    <div class="page-head">
+      <h1 class="page-title">CRM · Aramalar</h1>
+      <a href="/calls/yeni" class="btn-primary">Kayıt ekle</a>
+    </div>
+    <% if (!items.length) { %><p class="empty-hint">Kayıt yok.</p><% } else { %>
+    <div class="table-wrap card-elevated">
+      <table class="data-table">
+        <thead><tr><th>Tarih</th><th>Müşteri</th><th>Kişi</th><th>Konu</th><th>Sonuç</th><th>Durum</th><th></th></tr></thead>
+        <tbody>
+          <% items.forEach(a => { %>
+          <tr class="row-hover">
+            <td><%= new Date(a.date).toLocaleDateString('tr') %></td>
+            <td><%= a.client ? a.client.name : '' %></td>
+            <td><%= a.callerCallee||'—' %></td>
+            <td><%= (a.subject||'').slice(0,40) %></td>
+            <td><%= a.result||'—' %></td>
+            <td><span class="tag"><%= a.status %></span></td>
+            <td class="row-actions">
+              <a href="/calls/<%= a._id %>/duzenle" class="btn-ghost sm">Düzenle</a>
+              <% if (currentUser.role === 'admin') { %>
+              <form action="/calls/<%= a._id %>?_method=DELETE" method="post" class="inline-form" data-swal-delete><button type="submit" class="btn-danger sm">Sil</button></form>
+              <% } %>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <% } %>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

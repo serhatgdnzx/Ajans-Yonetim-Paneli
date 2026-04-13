@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body">
+  <%- include('../partials/nav', { active: 'clients' }) %>
+  <main class="app-main">
+    <div class="page-head">
+      <h1 class="page-title anim-fade-up">Müşteriler</h1>
+      <a href="/clients/yeni" class="btn-primary anim-fade-up" style="--d:0.05s">Müşteri ekle</a>
+    </div>
+    <% if (!clients.length) { %>
+    <p class="empty-hint anim-fade-up">Kayıt yok. <a href="/clients/yeni">İlk müşteri</a></p>
+    <% } else { %>
+    <div class="table-wrap card-elevated anim-fade-up" style="--d:0.08s">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Kod</th>
+            <th>Ad</th>
+            <th>Sektör</th>
+            <th>İlgili</th>
+            <th>E-posta</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% clients.forEach(c => { %>
+          <tr class="row-hover">
+            <td><code class="code-tag"><%= c.customerCode || '—' %></code></td>
+            <td><strong><%= c.name %></strong></td>
+            <td><%= c.sector || '—' %></td>
+            <td><%= c.contactPerson || '—' %></td>
+            <td><%= c.email || '—' %></td>
+            <td class="row-actions">
+              <a href="/clients/<%= c._id %>/detay" class="btn-ghost sm">Detay</a>
+              <a href="/clients/<%= c._id %>/duzenle" class="btn-ghost sm">Düzenle</a>
+              <% if (currentUser.role === 'admin') { %>
+              <form action="/clients/<%= c._id %>?_method=DELETE" method="post" class="inline-form" data-swal-delete data-swal-title="Müşteri ve TÜM ilişkili kayıtlar silinsin mi?">
+                <button type="submit" class="btn-danger sm">Sil</button>
+              </form>
+              <% } %>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <% } %>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

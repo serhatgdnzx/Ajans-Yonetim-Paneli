@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <%- include('../partials/head') %>
+</head>
+<body class="app-body">
+  <%- include('../partials/nav', { active: 'users' }) %>
+  <main class="app-main">
+    <h1 class="page-title">Ekip & roller</h1>
+    <p class="subtle">Yöneticiler müşteri ve proje silebilir; çalışanlar düzenleyebilir. Telefon, müşteri portalında proje yöneticisi olarak gösterilir.</p>
+    <div class="table-wrap card-elevated">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Ad</th>
+            <th>E-posta</th>
+            <th>Telefon</th>
+            <th>Rol</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach(u => { %>
+          <tr>
+            <td><strong><%= u.name %></strong><% if (String(u._id) === currentUser.id) { %> <span class="tag">Siz</span><% } %></td>
+            <td><%= u.email %></td>
+            <td><%= u.phone || '—' %></td>
+            <td><%= u.role === 'admin' ? 'Yönetici' : 'Çalışan' %></td>
+            <td>
+              <% if (String(u._id) !== currentUser.id) { %>
+              <form method="post" action="/users/<%= u._id %>/rol" class="inline-form role-form">
+                <select name="role">
+                  <option value="employee" <%= u.role === 'employee' ? 'selected' : '' %>>Çalışan</option>
+                  <option value="admin" <%= u.role === 'admin' ? 'selected' : '' %>>Yönetici</option>
+                </select>
+                <button type="submit" class="btn-ghost sm">Güncelle</button>
+              </form>
+              <% } else { %>—<% } %>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+  <%- include('../partials/foot') %>
+</body>
+</html>

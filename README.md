@@ -1,14 +1,14 @@
-Ajans Yönetim, reklam / dijital ajansların müşterilerini ve projelerini tek yerden yönetmesi için geliştirilmiş bir web uygulamasıdır. Personel için panel; müşteriler için ayrı bir müşteri portalı (giriş ile kendi projelerine erişim) sunar.
+Ajansların müşteri ilişkilerini, proje süreçlerini ve operasyonel işlerini tek bir platform üzerinden yönetmesini sağlayan kapsamlı bir web uygulamasıdır. Sistem; personel paneli ve müşterilere özel giriş yapılabilen bir müşteri portalı sunar.
 
 # Öne çıkan özellikler
 
-Müşteri ve proje yönetimi — Müşteri kartları, projeler, durum takibi (devam ediyor / bitti).<br>
-Görev panosu — Görevler sütunlarda (yapılacak, devam, bitti) takip edilir.<br>
-Operasyon kayıtları — İş günlükleri, teslimatlar, sosyal içerik kayıtları, revizyonlar ve çağrı logları.<br>
-Bekleyen işler ve raporlar — Özet metrikler ve istatistikler (dashboard üzerinden).<br>
-Excel dışa aktarım — Verilerin dışa aktarılması (exceljs).<br>
-Kimlik doğrulama — Oturum tabanlı giriş; şifreler bcryptjs ile; oturumlar MongoDB’de saklanır (connect-mongo).<br>
+Müşteri ve proje yönetimi (durum takibi ile)<br>
+Kanban tarzı görev panosu (yapılacak / devam / tamamlandı)<br>
+Operasyon kayıtları (iş günlükleri, teslimatlar, revizyonlar, çağrı logları)<br>
+Dashboard üzerinden raporlama ve metrik takibi<br>
+Excel formatında veri dışa aktarımı<br>
+Güvenli kimlik doğrulama ve oturum yönetimi<br>
 
-# Diller ve Bazı Modüller
+# Kullanılan Teknolojiler
 
-Node.js (≥18), Express, EJS, Mongoose, MongoDB, express-session, multer.
+Node.js, Express, EJS, MongoDB, Mongoose, express-session, multer

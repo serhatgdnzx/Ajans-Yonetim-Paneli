@@ -1,5 +1,5 @@
 {
-  "name": "ajans-yonetim",
+  "name": "ajans-yonetim-paneli",
   "version": "1.0.0",
   "description": "Ajans müşteri ve proje takip paneli",
   "main": "app.js",
